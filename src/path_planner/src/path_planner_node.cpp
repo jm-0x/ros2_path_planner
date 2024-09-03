@@ -9,8 +9,9 @@ public:
   path_planner_node() : Node("path_planner_node") {
     map_subscription_ = this->create_subscription<lfs_msgs::msg::Map>(
         "/mapping/track_points", 10,
-        std::bind(&path_planner_node::map_callback, this,
-                  std::placeholders::_1));
+        [this](const lfs_msgs::msg::Map::SharedPtr msg){
+            this->map_callback(msg);
+            });
 
     path_publisher_ =
         this->create_publisher<nav_msgs::msg::Path>("/path/global", 10);
